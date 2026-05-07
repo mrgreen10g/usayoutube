@@ -1,533 +1,300 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Гайд: US YouTube Канал из РФ</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Chosen Palette: Cyberpunk Minimal (Slate 900 bg, Neon Green/Cyan accents, Slate 300 text) -->
-    <!-- Application Structure Plan: The SPA uses a sidebar navigation dashboard layout. This structure is chosen because the process of creating a stealth US account involves distinct phases: Theory, Toolkit, Budgeting, Execution, and Post-Execution (Warm-up). A linear document is overwhelming; a dashboard allows users to jump between setting up their tools, calculating costs, and following the step-by-step registration flow. Interactive accordions keep the execution phase clean. -->
-    <!-- Visualization & Content Choices: 
-         1. Budget Estimator -> Goal: Compare/Plan -> Viz: Interactive Doughnut Chart (Chart.js) -> Users toggle required tools to see dynamic cost updates.
-         2. Setup Process -> Goal: Organize/Inform -> Viz: Interactive Timeline Accordion (HTML/Tailwind/JS) -> Allows deep dive into specific steps without cluttering the screen.
-         3. Warm-up Tracker -> Goal: Inform/Progress -> Viz: HTML Progress Bar -> Visualizes the 7-day warm-up process.
-         Confirming NO SVG/Mermaid used. Unicode used for icons. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+import React, { useState } from 'react';
+import { 
+  Server, 
+  ShieldCheck, 
+  Globe, 
+  Smartphone, 
+  Mail, 
+  TrendingUp, 
+  DollarSign, 
+  Zap,
+  CheckCircle2,
+  AlertTriangle
+} from 'lucide-react';
 
-    <style>
-        /* Custom scrollbar for a polished look */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        
-        .tab-active { border-left-color: #10b981; background-color: #1e293b; color: #10b981; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(51, 65, 85, 0.5); }
-        
-        /* Chart Container Mandatory Styling */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px; /* Constrain max width */
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px; /* Defined height */
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container { height: 400px; }
-        }
-    </style>
-</head>
-<body class="bg-slate-900 text-slate-300 font-sans antialiased flex flex-col md:flex-row min-h-screen overflow-x-hidden">
+const App = () => {
+  const [activeTab, setActiveTab] = useState('pillars');
 
-    <!-- Mobile Header -->
-    <div class="md:hidden bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center z-50 sticky top-0">
-        <div class="text-xl font-bold text-white tracking-wider flex items-center">
-            <span class="text-emerald-400 mr-2">🇺🇸</span> US-TUBE <span class="text-xs text-slate-500 ml-2">STEALTH</span>
+  const startupCosts = [
+    { item: 'Windows VPS (FirstByte)', price: 32.20 },
+    { item: 'AdsPower (Base 10)', price: 9.00 },
+    { item: '5 ISP Proxies (IPRoyal)', price: 19.50 },
+    { item: '5 Tello eSIM (Setup)', price: 49.00 },
+    { item: '5 Outlook Emails', price: 0.49 },
+  ];
+
+  const monthlyCosts = [
+    { item: 'Windows VPS', price: 32.20 },
+    { item: 'AdsPower', price: 9.00 },
+    { item: '5 ISP Proxies', price: 19.50 },
+    { item: '5 Tello Lines ($5/each)', price: 25.00 },
+  ];
+
+  const totalStartup = startupCosts.reduce((acc, curr) => acc + curr.price, 0);
+  const totalMonthly = monthlyCosts.reduce((acc, curr) => acc + curr.price, 0);
+
+  const pillars = [
+    {
+      id: 1,
+      title: 'Удаленный сервер (VPS)',
+      provider: 'FirstByte',
+      cost: '$32.20 / мес',
+      icon: <Server className="w-8 h-8 text-blue-400" />,
+      desc: 'Фундамент нашей системы. Использование выделенного сервера позволяет работать 24/7 без нагрузки на личные ПК.',
+      details: [
+        'Локация: США/Европа (низкий пинг для комфортной работы).',
+        'ОС: Windows (англоязычная версия для чистоты отпечатков).',
+        'Безопасность: Полная изоляция активности команды от домашних IP.',
+        'Масштабируемость: Возможность расширения ресурсов при росте сетки.'
+      ]
+    },
+    {
+      id: 2,
+      title: 'Антидетект AdsPower',
+      provider: 'AdsPower (Base)',
+      cost: '$9 / мес',
+      icon: <ShieldCheck className="w-8 h-8 text-green-400" />,
+      desc: '«Мозг» операции. Создает уникальные цифровые отпечатки для каждого канала, исключая связь между ними.',
+      details: [
+        'Управление отпечатками: Смена Canvas, WebGL, AudioContext.',
+        'Автоматизация: Использование RPA и Local API для прогрева (имитация действий человека).',
+        'Командный доступ: Удобное переключение между 10 профилями.',
+        'Защита от утечек: Встроенный WebRTC Blocker.'
+      ]
+    },
+    {
+      id: 3,
+      title: 'ISP Прокси США',
+      provider: 'IPRoyal',
+      cost: '$19.50 / мес',
+      icon: <Globe className="w-8 h-8 text-purple-400" />,
+      desc: 'Эмуляция домашнего интернета. Для YouTube это выглядит как обычный американский провайдер (Verizon, AT&T).',
+      details: [
+        'Тип: ISP (Static Residential) — провайдерские, не серверные.',
+        'Чистота: Минимальный риск попадания в спам-базы Google.',
+        'Скорость: Безлимитный трафик для загрузки тяжелых 4K видео.',
+        'Стабильность: Статичный IP закреплен за конкретным каналом навсегда.'
+      ]
+    },
+    {
+      id: 4,
+      title: 'eSIM Номера США',
+      provider: 'Tello',
+      cost: '$49 старт / $25 мес',
+      icon: <Smartphone className="w-8 h-8 text-orange-400" />,
+      desc: 'Юридическая личность канала. Реальные номера для подтверждения функций YouTube Studio.',
+      details: [
+        'Верификация: Доступ к загрузке превью и видео >15 мин.',
+        'Wi-Fi Calling: Прием СМС в любой точке мира бесплатно через интернет.',
+        'Владение: Номер принадлежит нам постоянно (не разовый сервис).',
+        'Траст: Google видит привязку к реальному сотовому оператору США.'
+      ]
+    },
+    {
+      id: 5,
+      title: 'Резервные почты',
+      provider: 'HQ-Accounts',
+      cost: '$0.49 (разово)',
+      icon: <Mail className="w-8 h-8 text-red-400" />,
+      desc: 'Страховка. Позволяют восстановить Gmail в случае проверки, не оставляя «русского следа».',
+      details: [
+        'Сервис: Outlook/Yahoo (максимальный траст у Google).',
+        'Отлежка: Берем аккаунты с возрастом 90+ дней.',
+        'Безопасность: У каждого канала — своя уникальная почта восстановления.',
+        'Проверка: Работают через веб-авторизацию в AdsPower.'
+      ]
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans p-4 md:p-8">
+      {/* Header */}
+      <header className="max-w-6xl mx-auto mb-12 text-center">
+        <div className="inline-block bg-blue-600/20 text-blue-400 px-4 py-1 rounded-full text-sm font-bold mb-4 border border-blue-400/30">
+          STRATEGY: MAXIMUM TRUST
         </div>
-        <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white focus:outline-none text-2xl">
-            ☰
-        </button>
-    </div>
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+          YouTube Automation: USA Market
+        </h1>
+        <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          Профессиональная архитектура для создания и масштабирования сетки каналов с защитой от блокировок по «отпечаткам».
+        </p>
+      </header>
 
-    <!-- Sidebar Navigation -->
-    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-slate-900 border-r border-slate-800 fixed md:sticky top-0 h-screen z-40 transition-transform duration-300">
-        <div class="p-6 hidden md:block">
-            <div class="text-2xl font-bold text-white tracking-wider flex items-center">
-                <span class="text-emerald-400 mr-2">🇺🇸</span> US-TUBE
+      {/* Navigation */}
+      <div className="max-w-6xl mx-auto mb-8">
+        <div className="flex border-b border-slate-700 space-x-8">
+          <button 
+            onClick={() => setActiveTab('pillars')}
+            className={`pb-4 px-2 font-medium transition-all ${activeTab === 'pillars' ? 'border-b-2 border-blue-500 text-blue-400' : 'text-slate-400 hover:text-slate-200'}`}
+          >
+            Компоненты Системы
+          </button>
+          <button 
+            onClick={() => setActiveTab('budget')}
+            className={`pb-4 px-2 font-medium transition-all ${activeTab === 'budget' ? 'border-b-2 border-blue-500 text-blue-400' : 'text-slate-400 hover:text-slate-200'}`}
+          >
+            Смета и ROI
+          </button>
+          <button 
+            onClick={() => setActiveTab('pros')}
+            className={`pb-4 px-2 font-medium transition-all ${activeTab === 'pros' ? 'border-b-2 border-blue-500 text-blue-400' : 'text-slate-400 hover:text-slate-200'}`}
+          >
+            Почему этот путь?
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <main className="max-w-6xl mx-auto">
+        {activeTab === 'pillars' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pillars.map((p) => (
+              <div key={p.id} className="bg-slate-800 border border-slate-700 p-6 rounded-2xl hover:shadow-xl hover:shadow-blue-500/10 transition-all group">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="p-3 bg-slate-900 rounded-xl group-hover:scale-110 transition-transform">
+                    {p.icon}
+                  </div>
+                  <span className="text-xs font-mono text-slate-500 bg-slate-900 px-2 py-1 rounded italic">{p.provider}</span>
+                </div>
+                <h3 className="text-xl font-bold mb-2">{p.title}</h3>
+                <p className="text-sm text-slate-400 mb-4 h-12 overflow-hidden">{p.desc}</p>
+                <div className="space-y-2">
+                  {p.details.map((d, i) => (
+                    <div key={i} className="flex items-center text-xs text-slate-300">
+                      <CheckCircle2 className="w-3 h-3 mr-2 text-blue-500 flex-shrink-0" />
+                      {d}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 pt-4 border-t border-slate-700 flex justify-between items-center">
+                  <span className="text-slate-500 text-xs">Затраты:</span>
+                  <span className="font-bold text-blue-400">{p.cost}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'budget' && ( activeTab === 'budget' &&
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Startup Table */}
+            <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+              <div className="flex items-center mb-6">
+                <Zap className="text-yellow-400 mr-3" />
+                <h2 className="text-2xl font-bold">Затраты на старте</h2>
+              </div>
+              <div className="space-y-4">
+                {startupCosts.map((c, i) => (
+                  <div key={i} className="flex justify-between items-center py-2 border-b border-slate-700/50">
+                    <span className="text-slate-300">{c.item}</span>
+                    <span className="font-mono font-bold text-slate-100">${c.price.toFixed(2)}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center pt-4 text-xl">
+                  <span className="font-extrabold text-blue-400">ИТОГО ЗАПУСК:</span>
+                  <span className="font-mono font-extrabold text-white bg-blue-600 px-4 py-1 rounded-lg">
+                    ${totalStartup.toFixed(2)}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div class="text-xs text-slate-500 mt-1 uppercase tracking-widest">Stealth Setup Guide</div>
-        </div>
-        <div class="flex flex-col mt-4 md:mt-0 space-y-1">
-            <button onclick="nav('intro')" id="nav-intro" class="tab-btn tab-active text-left px-6 py-4 border-l-4 border-transparent hover:bg-slate-800 transition-colors font-medium text-sm">
-                📌 Введение & База
-            </button>
-            <button onclick="nav('tools')" id="nav-tools" class="tab-btn text-left px-6 py-4 border-l-4 border-transparent hover:bg-slate-800 transition-colors font-medium text-sm">
-                🛠️ Технический Арсенал
-            </button>
-            <button onclick="nav('budget')" id="nav-budget" class="tab-btn text-left px-6 py-4 border-l-4 border-transparent hover:bg-slate-800 transition-colors font-medium text-sm">
-                💰 Расчет Бюджета
-            </button>
-            <button onclick="nav('steps')" id="nav-steps" class="tab-btn text-left px-6 py-4 border-l-4 border-transparent hover:bg-slate-800 transition-colors font-medium text-sm">
-                ⚙️ Пошаговая Настройка
-            </button>
-            <button onclick="nav('warmup')" id="nav-warmup" class="tab-btn text-left px-6 py-4 border-l-4 border-transparent hover:bg-slate-800 transition-colors font-medium text-sm">
-                🔥 Прогрев & Алгоритмы
-            </button>
-        </div>
-        <div class="mt-auto p-6 text-xs text-slate-600">
-            Система изоляции отпечатков v2.0
-        </div>
-    </nav>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 p-4 md:p-8 lg:p-12 overflow-y-auto w-full">
-        <div class="max-w-5xl mx-auto">
-
-            <!-- SECTION: Intro -->
-            <section id="sec-intro" class="content-section block animate-fade-in">
-                <header class="mb-8 border-b border-slate-700 pb-4">
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Создание US Google-аккаунта</h1>
-                    <p class="text-slate-400 text-lg">Полная изоляция от РФ-отпечатков для алгоритмов YouTube</p>
-                </header>
-                
-                <div class="glass-panel p-6 rounded-xl mb-8">
-                    <h2 class="text-xl text-emerald-400 mb-3 font-semibold">Цель руководства</h2>
-                    <p class="text-slate-300 leading-relaxed mb-4">
-                        Данный раздел объясняет базовую концепцию. Алгоритмы YouTube жестко привязывают авторов к геопозиции на основе цифровых отпечатков (IP, язык ОС, железо, часовой пояс, история куки). Наша задача — создать 100% синтетическую личность пользователя из США. 
-                    </p>
-                    <p class="text-slate-300 leading-relaxed">
-                        Здесь вы найдете структурированную выжимку о том, как из РФ правильно зарегистрировать почту и канал, чтобы YouTube индексировал ваши видео <b>исключительно на англоговорящую (Tier-1) аудиторию</b>, не выдавая теневых банов за несоответствие гео.
-                    </p>
+            {/* Monthly Table */}
+            <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+              <div className="flex items-center mb-6">
+                <TrendingUp className="text-emerald-400 mr-3" />
+                <h2 className="text-2xl font-bold">Ежемесячное содержание</h2>
+              </div>
+              <div className="space-y-4">
+                {monthlyCosts.map((c, i) => (
+                  <div key={i} className="flex justify-between items-center py-2 border-b border-slate-700/50">
+                    <span className="text-slate-300">{c.item}</span>
+                    <span className="font-mono font-bold text-slate-100">${c.price.toFixed(2)}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center pt-4 text-xl">
+                  <span className="font-extrabold text-emerald-400">ИТОГО В МЕСЯЦ:</span>
+                  <span className="font-mono font-extrabold text-white bg-emerald-600 px-4 py-1 rounded-lg">
+                    ${totalMonthly.toFixed(2)}
+                  </span>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 hover:border-emerald-500 transition-colors">
-                        <div class="text-3xl mb-2">🕵️‍♂️</div>
-                        <h3 class="text-white font-bold mb-2">Анонимность</h3>
-                        <p class="text-sm text-slate-400">Скрытие реального IP, WebRTC, DNS и отпечатков Canvas браузера.</p>
-                    </div>
-                    <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 hover:border-emerald-500 transition-colors">
-                        <div class="text-3xl mb-2">🇺🇸</div>
-                        <h3 class="text-white font-bold mb-2">Релевантность</h3>
-                        <p class="text-sm text-slate-400">Формирование куки-файлов и истории просмотров типичного жителя США.</p>
-                    </div>
-                    <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 hover:border-emerald-500 transition-colors">
-                        <div class="text-3xl mb-2">📈</div>
-                        <h3 class="text-white font-bold mb-2">Индексация</h3>
-                        <p class="text-sm text-slate-400">Получение органического трафика из Tier-1 стран за счет правильного траста.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION: Tools -->
-            <section id="sec-tools" class="content-section hidden animate-fade-in">
-                <header class="mb-8 border-b border-slate-700 pb-4">
-                    <h1 class="text-3xl font-bold text-white mb-2">Технический Арсенал</h1>
-                    <p class="text-slate-400">Инструменты, необходимые для подмены цифровой личности</p>
-                </header>
-
-                <p class="mb-6 leading-relaxed">
-                    В этом разделе перечислен необходимый софт. Создать релевантный аккаунт через обычный Chrome + VPN <b>невозможно</b> — Google легко читает реальные аппаратные отпечатки и утечки WebRTC. Нам нужен профессиональный подход.
+              </div>
+              <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-xl flex items-start">
+                <DollarSign className="w-5 h-5 text-emerald-400 mr-3 mt-1" />
+                <p className="text-xs text-emerald-300 leading-relaxed">
+                  При стоимости CPM в США от $15-20, ферма окупается при достижении суммарных 10,000 просмотров на всю сетку в месяц. Это сверх-низкий порог окупаемости.
                 </p>
+              </div>
+            </div>
+          </div>
+        )}
 
-                <div class="space-y-6">
-                    <!-- Tool 1 -->
-                    <div class="glass-panel p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start">
-                        <div class="bg-slate-800 p-4 rounded-lg text-4xl shadow-inner border border-slate-700">💻</div>
-                        <div>
-                            <h2 class="text-xl text-white font-bold mb-2">Антидетект Браузер</h2>
-                            <p class="text-sm text-slate-400 mb-3">Подменяет отпечатки устройства (User-Agent, шрифты, видеокарту, язык ОС). Создает изолированный контейнер (профиль) для аккаунта.</p>
-                            <ul class="text-sm list-disc list-inside text-emerald-400 space-y-1">
-                                <li><span class="text-slate-300"><b>Dolphin Anty:</b> Топ выбор. 10 профилей бесплатно.</span></li>
-                                <li><span class="text-slate-300"><b>AdsPower:</b> Отличная альтернатива, гибкие настройки. 2 профиля бесплатно.</span></li>
-                                <li><span class="text-slate-300"><b>Octo Browser:</b> Премиум сегмент, максимальный траст (платно).</span></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Tool 2 -->
-                    <div class="glass-panel p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start">
-                        <div class="bg-slate-800 p-4 rounded-lg text-4xl shadow-inner border border-slate-700">🌐</div>
-                        <div>
-                            <h2 class="text-xl text-white font-bold mb-2">Резидентные Прокси (Residential Proxies)</h2>
-                            <p class="text-sm text-slate-400 mb-3">Обычный VPN выдает дата-центр. Нам нужен IP реального провайдера в США (AT&T, Comcast и др.). Только IPv4 SOCKS5 или HTTPs.</p>
-                            <ul class="text-sm list-disc list-inside text-emerald-400 space-y-1">
-                                <li><span class="text-slate-300"><b>AstroProxy:</b> Можно покупать трафик по мегабайтам (очень дешево для старта).</span></li>
-                                <li><span class="text-slate-300"><b>Proxy6 / SOAX / Smartproxy:</b> Надежные резидентные IP США.</span></li>
-                                <li><span class="text-slate-300"><span class="text-red-400 font-bold">ОПАСНОСТЬ:</span> Никогда не используйте бесплатные прокси или VPN (NordVPN, ExpressVPN и т.д.) — они забанены Google.</span></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Tool 3 -->
-                    <div class="glass-panel p-6 rounded-xl flex flex-col md:flex-row gap-6 items-start">
-                        <div class="bg-slate-800 p-4 rounded-lg text-4xl shadow-inner border border-slate-700">📱</div>
-                        <div>
-                            <h2 class="text-xl text-white font-bold mb-2">US Номер Телефона (SMS)</h2>
-                            <p class="text-sm text-slate-400 mb-3">Необходим для верификации Google аккаунта и активации YouTube канала (для загрузки длинных видео и превью).</p>
-                            <ul class="text-sm list-disc list-inside text-emerald-400 space-y-1">
-                                <li><span class="text-slate-300"><b>Бюджетно (Виртуальные):</b> SMS-Activate, 5sim, Grizzly SMS. (Риск: номера часто заспамлены).</span></li>
-                                <li><span class="text-slate-300"><b>Средне (Аренда):</b> Аренда номера США на месяц на тех же сервисах.</span></li>
-                                <li><span class="text-slate-300"><b>Идеально (Физика):</b> Покупка физической e-sim США (например, T-Mobile prepaid) через посредников. Дорого, но вечно.</span></li>
-                            </ul>
-                        </div>
-                    </div>
+        {activeTab === 'pros' && (
+          <div className="space-y-6">
+            <div className="bg-gradient-to-br from-blue-900/20 to-slate-800 p-8 rounded-2xl border border-slate-700">
+              <h2 className="text-3xl font-bold mb-8 text-center">Преимущества данной архитектуры</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex items-start">
+                  <div className="bg-blue-500/20 p-2 rounded-lg mr-4">
+                    <ShieldCheck className="text-blue-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Железобетонная анонимность</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">Комбинация ISP-прокси и AdsPower делает каждый профиль неотличимым от реального домашнего компьютера жителя Техаса или Делавэра. YouTube не видит «сетку», он видит 10 независимых авторов.</p>
+                  </div>
                 </div>
-            </section>
-
-            <!-- SECTION: Budget -->
-            <section id="sec-budget" class="content-section hidden animate-fade-in">
-                <header class="mb-8 border-b border-slate-700 pb-4">
-                    <h1 class="text-3xl font-bold text-white mb-2">Интерактивная Смета</h1>
-                    <p class="text-slate-400">Рассчитайте приблизительные затраты на старт</p>
-                </header>
-
-                <p class="mb-6 leading-relaxed">
-                    В этом разделе вы можете смоделировать свой бюджет. Отмечайте нужные инструменты в таблице слева, и график динамически покажет ваши итоговые затраты на 1 месяц работы 1 аккаунта.
-                </p>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center glass-panel p-6 rounded-xl">
-                    <!-- Controls -->
-                    <div class="space-y-4" id="budget-controls">
-                        <!-- JS will populate this -->
-                    </div>
-
-                    <!-- Chart Container -->
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="chart-container">
-                            <canvas id="costChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <div class="text-slate-400 text-sm">Итого за месяц:</div>
-                            <div id="total-cost" class="text-4xl font-bold text-emerald-400">$0</div>
-                        </div>
-                    </div>
+                <div className="flex items-start">
+                  <div className="bg-purple-500/20 p-2 rounded-lg mr-4">
+                    <Zap className="text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Автоматизация процессов</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">Local API позволяет нам в будущем подключить скрипты для автоматической загрузки видео, простановки тегов и прогрева аккаунтов. Машина будет работать, пока команда спит.</p>
+                  </div>
                 </div>
-                
-                <div class="mt-6 bg-slate-800/50 p-4 rounded-lg border border-slate-700 text-sm">
-                    💡 <b>Совет по оптимизации:</b> Самый бюджетный рабочий старт обойдется примерно в <b>$5-$8</b> (Бесплатный Dolphin Anty + AstroProxy 1GB + SMS-Activate разовая симка).
+                <div className="flex items-start">
+                  <div className="bg-orange-500/20 p-2 rounded-lg mr-4">
+                    <Smartphone className="text-orange-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Постоянный доступ к СМС</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">В отличие от разовых номеров, Tello дает нам постоянное владение. Если YouTube запросит подтверждение через 3 месяца — у нас всё под рукой на iPhone через Wi-Fi Calling.</p>
+                  </div>
                 </div>
-            </section>
-
-            <!-- SECTION: Steps -->
-            <section id="sec-steps" class="content-section hidden animate-fade-in">
-                <header class="mb-8 border-b border-slate-700 pb-4">
-                    <h1 class="text-3xl font-bold text-white mb-2">Алгоритм Настройки (Step-by-Step)</h1>
-                    <p class="text-slate-400">Поэтапный процесс создания аккаунта без "русского следа"</p>
-                </header>
-
-                <p class="mb-6 leading-relaxed">
-                    Здесь представлена строгая последовательность действий. Нажимайте на каждый шаг, чтобы открыть подробные инструкции. Важно не нарушать порядок, иначе алгоритмы свяжут вас с РФ.
-                </p>
-
-                <div class="space-y-4">
-                    <!-- Step 1 -->
-                    <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-                        <button onclick="toggleStep('step1')" class="w-full px-6 py-4 flex justify-between items-center hover:bg-slate-700 transition-colors focus:outline-none">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
-                                <h3 class="font-bold text-white text-left">Настройка среды (Браузер + Прокси)</h3>
-                            </div>
-                            <span id="icon-step1" class="text-2xl transition-transform duration-200">▾</span>
-                        </button>
-                        <div id="content-step1" class="hidden px-6 py-4 bg-slate-900 border-t border-slate-700 text-slate-300 text-sm leading-relaxed space-y-2">
-                            <p>1. Скачайте и установите антидетект браузер (например, Dolphin Anty).</p>
-                            <p>2. Купите резидентные прокси США (SOCKS5).</p>
-                            <p>3. Создайте новый профиль в браузере. Выберите ОС (рекомендуется Windows или macOS).</p>
-                            <p>4. Вставьте данные прокси (IP:Port:Login:Password).</p>
-                            <p>5. <b>Критично:</b> В настройках профиля выберите язык браузера <b>en-US</b> и часовой пояс, соответствующий IP-адресу прокси (например, America/New_York). Включите подмену WebRTC.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-                        <button onclick="toggleStep('step2')" class="w-full px-6 py-4 flex justify-between items-center hover:bg-slate-700 transition-colors focus:outline-none">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
-                                <h3 class="font-bold text-white text-left">Проверка на анонимность</h3>
-                            </div>
-                            <span id="icon-step2" class="text-2xl transition-transform duration-200">▾</span>
-                        </button>
-                        <div id="content-step2" class="hidden px-6 py-4 bg-slate-900 border-t border-slate-700 text-slate-300 text-sm leading-relaxed space-y-2">
-                            <p>1. Запустите созданный профиль.</p>
-                            <p>2. Перейдите на <b>whoer.net</b>. Анонимность должна быть 100%. Убедитесь, что нет расхождений между часовым поясом системы и браузера.</p>
-                            <p>3. Перейдите на <b>pixelscan.net</b> или <b>browserleaks.com</b>. Убедитесь, что IP определяется как США, WebRTC не выдает ваш локальный IP, а DNS-серверы принадлежат США.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-                        <button onclick="toggleStep('step3')" class="w-full px-6 py-4 flex justify-between items-center hover:bg-slate-700 transition-colors focus:outline-none">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
-                                <h3 class="font-bold text-white text-left">Набор "куки" (Прогрев ДО регистрации)</h3>
-                            </div>
-                            <span id="icon-step3" class="text-2xl transition-transform duration-200">▾</span>
-                        </button>
-                        <div id="content-step3" class="hidden px-6 py-4 bg-slate-900 border-t border-slate-700 text-slate-300 text-sm leading-relaxed space-y-2">
-                            <p><i>Не регистрируйте аккаунт сразу! Выглядите как реальный человек.</i></p>
-                            <p>1. Посетите популярные американские сайты (Amazon, eBay, Reddit, CNN, Zillow).</p>
-                            <p>2. Покликайте по ссылкам, примите файлы cookie (Accept All Cookies).</p>
-                            <p>3. Зайдите на YouTube без аккаунта. Посмотрите несколько видео американских блогеров. Оставьте профиль "отлежаться" на пару часов.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 4 -->
-                    <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-                        <button onclick="toggleStep('step4')" class="w-full px-6 py-4 flex justify-between items-center hover:bg-slate-700 transition-colors focus:outline-none">
-                            <div class="flex items-center gap-4">
-                                <div class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
-                                <h3 class="font-bold text-white text-left">Регистрация Google & YouTube</h3>
-                            </div>
-                            <span id="icon-step4" class="text-2xl transition-transform duration-200">▾</span>
-                        </button>
-                        <div id="content-step4" class="hidden px-6 py-4 bg-slate-900 border-t border-slate-700 text-slate-300 text-sm leading-relaxed space-y-2">
-                            <p>1. Перейдите на <b>gmail.com</b> и нажмите "Create account". Имя и фамилия должны быть англоязычными (например, John Smith).</p>
-                            <p>2. Дата рождения — возраст старше 18 лет. Резервная почта (Recovery email) — купите трастовую почту (Yahoo, Outlook) или используйте временную.</p>
-                            <p>3. <b>СМС Верификация:</b> Купите номер США в сервисе активаций. Введите код. <i>(Иногда Google пропускает без SMS, но для YouTube номер все равно понадобится)</i>.</p>
-                            <p>4. Зайдите на YouTube, авторизуйтесь. Нажмите "Create a channel". Назовите канал на английском.</p>
-                            <p>5. Перейдите в YouTube Studio -> Settings -> Channel -> <b>Country of residence: United States</b>.</p>
-                            <p>6. В разделе "Feature eligibility" подтвердите номер телефона (Verify phone number) тем же US номером для загрузки превью.</p>
-                        </div>
-                    </div>
+                <div className="flex items-start">
+                  <div className="bg-emerald-500/20 p-2 rounded-lg mr-4">
+                    <CheckCircle2 className="text-emerald-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-2">Масштабируемость</h4>
+                    <p className="text-sm text-slate-400 leading-relaxed">Система легко расширяется. Хотим 20 или 50 каналов? Просто добавляем прокси и профили в уже настроенный браузер на сервере. Весь процесс уже отлажен.</p>
+                  </div>
                 </div>
-            </section>
+              </div>
+            </div>
 
-            <!-- SECTION: Warmup -->
-            <section id="sec-warmup" class="content-section hidden animate-fade-in">
-                <header class="mb-8 border-b border-slate-700 pb-4">
-                    <h1 class="text-3xl font-bold text-white mb-2">Алгоритмы & Прогрев</h1>
-                    <p class="text-slate-400">Как доказать YouTube, что вы из США</p>
-                </header>
+            <div className="bg-red-900/10 border border-red-500/20 p-6 rounded-2xl">
+              <div className="flex items-center mb-4">
+                <AlertTriangle className="text-red-400 mr-3" />
+                <h3 className="text-xl font-bold text-red-400">Критическая зона ответственности</h3>
+              </div>
+              <ul className="text-sm text-slate-400 space-y-3 list-disc ml-6">
+                <li>Никаких входов с личных IP — только через прокси.</li>
+                <li>Никакого копипаста ссылок между профилями.</li>
+                <li>Соблюдение лимитов загрузки: не более 1-2 видео на новый канал в день.</li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </main>
 
-                <p class="mb-6 leading-relaxed">
-                    Этот раздел визуализирует фазу «прогрева» аккаунта. Только что созданный канал имеет нулевой траст (доверие). Если вы сразу зальете 10 видео, вас могут пометить как спам-бота. Нам нужно имитировать поведение зрителя из США в течение 7 дней.
-                </p>
+      {/* Footer Area */}
+      <footer className="max-w-6xl mx-auto mt-16 pt-8 border-t border-slate-800 text-center text-slate-500">
+        <p className="text-sm italic">«Там, где другие боятся банов, мы строим экосистему»</p>
+      </footer>
+    </div>
+  );
+};
 
-                <div class="glass-panel p-6 rounded-xl mb-8">
-                    <div class="flex justify-between text-sm mb-2">
-                        <span class="text-slate-400">Уровень Траста (Google Trust Score)</span>
-                        <span id="trust-percent" class="text-emerald-400 font-bold">10%</span>
-                    </div>
-                    <!-- Custom Progress Bar (No SVG) -->
-                    <div class="w-full bg-slate-800 rounded-full h-4 mb-4 overflow-hidden border border-slate-700">
-                        <div id="trust-bar" class="bg-gradient-to-r from-emerald-600 to-emerald-400 h-4 rounded-full transition-all duration-500 ease-out" style="width: 10%"></div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs mt-6">
-                        <button onclick="updateTrust(1, 20)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded border border-slate-600">Дни 1-2<br><span class="text-slate-400">Просмотры</span></button>
-                        <button onclick="updateTrust(2, 50)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded border border-slate-600">Дни 3-4<br><span class="text-slate-400">Лайки/Подписки</span></button>
-                        <button onclick="updateTrust(3, 80)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded border border-slate-600">Дни 5-6<br><span class="text-slate-400">Комментарии</span></button>
-                        <button onclick="updateTrust(4, 100)" class="bg-slate-800 hover:bg-emerald-900 border-emerald-700 p-2 rounded border">День 7+<br><span class="text-emerald-400">Публикация</span></button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-slate-800 p-5 rounded-lg border-l-4 border-emerald-500">
-                        <h3 class="font-bold text-white mb-2 text-lg">Что ДЕЛАТЬ (✅)</h3>
-                        <ul class="text-sm space-y-2 text-slate-300">
-                            <li>• Искать видео на английском через поиск.</li>
-                            <li>• Смотреть видео до конца (удержание).</li>
-                            <li>• Подписываться на 1-2 канала в вашей нише в день.</li>
-                            <li>• Оставлять осмысленные комментарии (на англ.).</li>
-                            <li>• Загрузить аватарку и шапку канала.</li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-800 p-5 rounded-lg border-l-4 border-red-500">
-                        <h3 class="font-bold text-white mb-2 text-lg">Чего НЕ ДЕЛАТЬ (❌)</h3>
-                        <ul class="text-sm space-y-2 text-slate-300">
-                            <li>• Искать русский контент или кликать на ру-рекламу.</li>
-                            <li>• Использовать русскую раскладку клавиатуры при поиске.</li>
-                            <li>• Заливать видео в первый же день.</li>
-                            <li>• Копировать ссылки (Ctrl+C/V) с русских ресурсов напрямую в этот браузер.</li>
-                            <li>• Заходить в аккаунт с другого IP.</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </section>
-
-        </div>
-    </main>
-
-    <!-- Vanilla JS Logic -->
-    <script>
-        // --- Navigation Logic ---
-        function nav(tabId) {
-            // Hide all sections
-            document.querySelectorAll('.content-section').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block');
-            });
-            // Show target section
-            document.getElementById('sec-' + tabId).classList.remove('hidden');
-            document.getElementById('sec-' + tabId).classList.add('block');
-            
-            // Update sidebar styles
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('tab-active');
-            });
-            document.getElementById('nav-' + tabId).classList.add('tab-active');
-
-            // Render chart if budget tab is selected
-            if(tabId === 'budget') {
-                renderChart();
-            }
-
-            // Close mobile menu on click
-            document.getElementById('sidebar').classList.add('hidden');
-        }
-
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            if(sidebar.classList.contains('hidden')) {
-                sidebar.classList.remove('hidden');
-                sidebar.classList.add('absolute', 'top-16', 'h-[calc(100vh-64px)]', 'shadow-2xl');
-            } else {
-                sidebar.classList.add('hidden');
-                sidebar.classList.remove('absolute', 'top-16', 'h-[calc(100vh-64px)]', 'shadow-2xl');
-            }
-        }
-
-        // --- Budget Chart Logic (Chart.js) ---
-        let chartInstance = null;
-        const budgetItems = [
-            { id: 'b-anty', name: 'Антидетект (Dolphin)', cost: 0, desc: 'Бесплатный тариф (10 профилей)', checked: true },
-            { id: 'b-proxy-res', name: 'Резидентные Прокси (1GB)', cost: 5, desc: 'AstroProxy / SOAX', checked: true },
-            { id: 'b-sms-virt', name: 'Виртуальный SMS (США)', cost: 2, desc: 'Разовая активация Google', checked: true },
-            { id: 'b-sms-rent', name: 'Аренда номера (Месяц)', cost: 15, desc: 'Опционально (Надежнее)', checked: false },
-            { id: 'b-vps', name: 'US VPS Сервер', cost: 12, desc: 'Опционально (Макс. траст)', checked: false }
-        ];
-
-        function initBudgetControls() {
-            const container = document.getElementById('budget-controls');
-            container.innerHTML = '';
-            budgetItems.forEach((item, index) => {
-                container.innerHTML += `
-                    <label class="flex items-center p-3 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors ${item.checked ? 'bg-slate-800 border-emerald-600' : ''}">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-emerald-500 rounded border-slate-600 bg-slate-900" 
-                               onchange="toggleBudgetItem(${index}, this)" ${item.checked ? 'checked' : ''}>
-                        <div class="ml-3 flex-1">
-                            <span class="block text-white font-medium">${item.name}</span>
-                            <span class="block text-xs text-slate-400">${item.desc}</span>
-                        </div>
-                        <div class="text-emerald-400 font-bold">+$${item.cost}</div>
-                    </label>
-                `;
-            });
-        }
-
-        function toggleBudgetItem(index, checkbox) {
-            budgetItems[index].checked = checkbox.checked;
-            // Update styling of parent label
-            const label = checkbox.parentElement;
-            if(checkbox.checked) {
-                label.classList.add('bg-slate-800', 'border-emerald-600');
-            } else {
-                label.classList.remove('bg-slate-800', 'border-emerald-600');
-            }
-            renderChart();
-        }
-
-        function renderChart() {
-            const activeItems = budgetItems.filter(item => item.checked && item.cost > 0);
-            const total = budgetItems.reduce((sum, item) => item.checked ? sum + item.cost : sum, 0);
-            
-            document.getElementById('total-cost').innerText = `$${total}`;
-
-            const labels = activeItems.map(item => item.name);
-            const data = activeItems.map(item => item.cost);
-            // Colors matching our dark tech theme
-            const colors = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899'];
-
-            const ctx = document.getElementById('costChart').getContext('2d');
-
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
-            if(activeItems.length === 0) {
-                 // Fallback if everything is 0
-                 chartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: { labels: ['Бесплатно'], datasets: [{ data: [1], backgroundColor: ['#334155'] }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '75%' }
-                });
-                return;
-            }
-
-            chartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderColor: '#0f172a',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // MANDATORY for container sizing
-                    cutout: '70%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#cbd5e1', padding: 20, font: { family: 'sans-serif' } }
-                        },
-                        tooltip: {
-                            callbacks: { label: function(context) { return ' $' + context.raw; } }
-                        }
-                    }
-                }
-            });
-        }
-
-        // --- Step-by-Step Accordion Logic ---
-        function toggleStep(stepId) {
-            const content = document.getElementById('content-' + stepId);
-            const icon = document.getElementById('icon-' + stepId);
-            
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                content.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        // --- Warmup Progress Logic ---
-        function updateTrust(stepNum, percent) {
-            const bar = document.getElementById('trust-bar');
-            const txt = document.getElementById('trust-percent');
-            
-            bar.style.width = percent + '%';
-            txt.innerText = percent + '%';
-
-            // Change color based on trust level
-            if(percent >= 80) {
-                txt.className = 'text-emerald-400 font-bold';
-            } else if (percent >= 50) {
-                txt.className = 'text-blue-400 font-bold';
-            } else {
-                txt.className = 'text-amber-400 font-bold';
-            }
-        }
-
-        // Initialize App
-        window.onload = () => {
-            initBudgetControls();
-            // Start on Intro
-            nav('intro');
-        };
-    </script>
-</body>
-</html>
+export default App;
